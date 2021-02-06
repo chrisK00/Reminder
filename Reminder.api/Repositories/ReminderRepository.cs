@@ -1,8 +1,7 @@
-﻿using System;
+﻿using Reminder.api.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Reminder.api.Models;
 
 namespace Reminder.api.Repositories
 {
@@ -20,7 +19,6 @@ namespace Reminder.api.Repositories
 
         public IEnumerable<ReminderModel> GetAllDueReminders()
         {
-
             return _reminders
                 .Where(r => r.DueDate <= DateTime.Now)
                 .Where(r => !r.Sent);

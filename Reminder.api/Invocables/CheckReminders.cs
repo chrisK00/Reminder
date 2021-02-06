@@ -2,8 +2,6 @@
 using Reminder.api.Repositories;
 using Reminder.api.Services;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Mail;
 using System.Threading.Tasks;
 
@@ -13,11 +11,13 @@ namespace Reminder.api.Invocables
     {
         private readonly ReminderRepository _repository;
         private readonly MailService _mailService;
+
         public CheckReminders(ReminderRepository repository, MailService mailService)
         {
             _repository = repository;
             _mailService = mailService;
         }
+
         public async Task Invoke()
         {
             foreach (var item in _repository.GetAllDueReminders())
@@ -33,7 +33,6 @@ namespace Reminder.api.Invocables
                     {
                         item.Sent = true;
                     }
-
                 }
             }
         }

@@ -2,8 +2,6 @@
 using Reminder.api.Models;
 using Serilog;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
@@ -52,7 +50,6 @@ namespace Reminder.api.Services
                 _logger.Error(e, "Unknown error in mailservice.");
                 return false;
             }
-
         }
     }
 }
