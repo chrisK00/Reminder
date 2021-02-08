@@ -1,10 +1,12 @@
 using Coravel;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Reminder.api.Data;
 using Reminder.api.Invocables;
 using Reminder.api.Models;
 using Reminder.api.Repositories;
@@ -26,11 +28,14 @@ namespace Reminder.api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton(Log.Logger);
-            services.AddTransient<CheckReminders>();
+       //     services.AddTransient<CheckReminders>();
             services.AddSingleton<MailService>();
             services.AddScheduler();
-            services.AddSingleton<ReminderRepository>();
+            services.AddTransient<IReminderRepository,ReminderRepository>();
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.Configure<MailSettings>(Configuration.GetSection(nameof(MailSettings)));
+            services.AddDbContext<DataContext>(options => options.UseSqlite(
+                Configuration.GetConnectionString("Default")));
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -60,12 +65,14 @@ namespace Reminder.api
                 endpoints.MapControllers();
             });
 
+
             var provider = app.ApplicationServices;
             provider.UseScheduler(scheduler =>
           scheduler
           .Schedule<CheckReminders>()
           .EveryFiveSeconds()
         );
+
         }
     }
 }

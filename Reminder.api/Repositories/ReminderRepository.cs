@@ -1,27 +1,46 @@
-﻿using Reminder.api.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using Reminder.api.Data;
+using Reminder.api.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Reminder.api.Repositories
 {
-    public class ReminderRepository
+    public class ReminderRepository : IReminderRepository
     {
-        private readonly List<ReminderModel> _reminders = new()
-        {
-            new ReminderModel()
-            { Title = "Hämta barnen", Description = "Glöm inte vantarna", DueDate = DateTime.Now.AddDays(-1) },
-            new ReminderModel()
-            { Title = "Mata ormen", Description = "", DueDate = DateTime.Now.AddDays(2) },
-            new ReminderModel()
-            { Title = "STÄDA RUMMET", Description = "gör det fint :D", DueDate = DateTime.Now.AddDays(-5), Sent = true }
-        };
+        private readonly DataContext _context;
 
-        public IEnumerable<ReminderModel> GetAllDueReminders()
+        public ReminderRepository(DataContext context)
         {
-            return _reminders
+            _context = context;
+        }
+        public async Task<ReminderModel> Add(ReminderModel reminder)
+        {
+            await _context.Reminders.AddAsync(reminder);
+            return reminder;
+        }
+
+        public async Task Delete(Guid id)
+        {
+            var reminder = await GetbyId(id);
+            if (reminder == null)
+            {
+                throw new ArgumentException();
+            }
+            _context.Reminders.Remove(reminder);
+        }
+
+        public async Task<IEnumerable<ReminderModel>> GetAll() => await _context.Reminders.ToArrayAsync();
+        public IEnumerable<ReminderModel> GetAllDue()
+        {
+            return _context.Reminders
                 .Where(r => r.DueDate <= DateTime.Now)
                 .Where(r => !r.Sent);
         }
+
+        public async Task<ReminderModel> GetbyId(Guid id) => await _context.Reminders.FirstOrDefaultAsync(r => r.Id == id);
+
     }
 }

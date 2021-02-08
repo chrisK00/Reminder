@@ -9,18 +9,18 @@ namespace Reminder.api.Invocables
 {
     public class CheckReminders : IInvocable
     {
-        private readonly ReminderRepository _repository;
+        private readonly IReminderRepository _repo;
         private readonly MailService _mailService;
 
-        public CheckReminders(ReminderRepository repository, MailService mailService)
+        public CheckReminders(IReminderRepository repo, MailService mailService)
         {
-            _repository = repository;
+            _repo = repo;
             _mailService = mailService;
         }
 
         public async Task Invoke()
         {
-            foreach (var item in _repository.GetAllDueReminders())
+            foreach (var item in _repo.GetAllDue())
             {
                 if (item.DueDate <= DateTime.Now && !item.Sent)
                 {
