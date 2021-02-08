@@ -11,6 +11,7 @@ namespace Reminder.api.Repositories
         {
             _context = context;
         }
+
         public async Task Commit() => await _context.SaveChangesAsync();
     }
 }

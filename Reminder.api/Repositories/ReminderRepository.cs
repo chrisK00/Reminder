@@ -16,6 +16,7 @@ namespace Reminder.api.Repositories
         {
             _context = context;
         }
+
         public async Task<ReminderModel> Add(ReminderModel reminder)
         {
             await _context.Reminders.AddAsync(reminder);
@@ -33,6 +34,7 @@ namespace Reminder.api.Repositories
         }
 
         public async Task<IEnumerable<ReminderModel>> GetAll() => await _context.Reminders.ToArrayAsync();
+
         public IEnumerable<ReminderModel> GetAllDue()
         {
             return _context.Reminders
@@ -41,6 +43,5 @@ namespace Reminder.api.Repositories
         }
 
         public async Task<ReminderModel> GetbyId(Guid id) => await _context.Reminders.FirstOrDefaultAsync(r => r.Id == id);
-
     }
 }

@@ -66,14 +66,12 @@ namespace Reminder.api
                 endpoints.MapControllers();
             });
 
-
             var provider = app.ApplicationServices;
             provider.UseScheduler(scheduler =>
           scheduler
           .Schedule<CheckReminders>()
-          .EveryFiveSeconds()
+          .EveryThirtySeconds()
         );
-
         }
     }
 }
