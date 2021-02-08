@@ -34,6 +34,7 @@ namespace Reminder.api
             services.AddTransient<IReminderRepository, ReminderRepository>();
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.Configure<MailSettings>(Configuration.GetSection(nameof(MailSettings)));
+
             services.AddDbContext<DataContext>(options => options.UseSqlite(
                 Configuration.GetConnectionString("Default")));
 
