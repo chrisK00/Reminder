@@ -28,10 +28,10 @@ namespace Reminder.api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton(Log.Logger);
-       //     services.AddTransient<CheckReminders>();
+            services.AddTransient<CheckReminders>();
             services.AddSingleton<MailService>();
             services.AddScheduler();
-            services.AddTransient<IReminderRepository,ReminderRepository>();
+            services.AddTransient<IReminderRepository, ReminderRepository>();
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.Configure<MailSettings>(Configuration.GetSection(nameof(MailSettings)));
             services.AddDbContext<DataContext>(options => options.UseSqlite(
