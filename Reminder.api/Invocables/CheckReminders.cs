@@ -25,7 +25,7 @@ namespace Reminder.api.Invocables
                 if (item.DueDate <= DateTime.Now && !item.Sent)
                 {
                     var sent = await _mailService.SendMail(
-                        new MailAddress("christiankbackup@gmail.com"),
+                        new MailAddress("christianktesting@gmail.com"),
                         item.Title,
                         item.Description);
                     if (sent)
