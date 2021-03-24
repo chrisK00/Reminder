@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Coravel;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -24,16 +25,16 @@ namespace Reminder.api
 
         public IConfiguration Configuration { get; }
 
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {
+        {         
+            services.AddMailer(Configuration);
             services.AddSingleton(Log.Logger);
             services.AddTransient<CheckReminders>();
-            services.AddSingleton<MailService>();
             services.AddScheduler();
             services.AddTransient<IReminderRepository, ReminderRepository>();
             services.AddTransient<IUnitOfWork, UnitOfWork>();
-            services.Configure<MailSettings>(Configuration.GetSection(nameof(MailSettings)));
 
             services.AddDbContext<DataContext>(options => options.UseSqlite(
                 Configuration.GetConnectionString("Default")));
@@ -70,7 +71,7 @@ namespace Reminder.api
             provider.UseScheduler(scheduler =>
           scheduler
           .Schedule<CheckReminders>()
-          .EveryThirtySeconds()
+          .EveryFiveSeconds()
         );
         }
     }

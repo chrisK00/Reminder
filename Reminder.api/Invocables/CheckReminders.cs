@@ -1,4 +1,7 @@
 ﻿using Coravel.Invocable;
+using Coravel.Mailer.Mail.Interfaces;
+using Microsoft.Extensions.Logging;
+using Reminder.api.Models;
 using Reminder.api.Repositories;
 using Reminder.api.Services;
 using System;
@@ -9,13 +12,16 @@ namespace Reminder.api.Invocables
 {
     public class CheckReminders : IInvocable
     {
+        private readonly IMailer _mailer;
+        private readonly ILogger _logger;
         private readonly IReminderRepository _repo;
-        private readonly MailService _mailService;
 
-        public CheckReminders(IReminderRepository repo, MailService mailService)
+        public CheckReminders(IReminderRepository repo, IMailer mailer
+            , ILogger<CheckReminders> logger)
         {
             _repo = repo;
-            _mailService = mailService;
+            _mailer = mailer;
+            _logger = logger;
         }
 
         public async Task Invoke()
@@ -24,14 +30,15 @@ namespace Reminder.api.Invocables
             {
                 if (item.DueDate <= DateTime.Now && !item.Sent)
                 {
-                    var sent = await _mailService.SendMail(
-                        new MailAddress("christianktesting@gmail.com"),
-                        item.Title,
-                        item.Description);
-                    if (sent)
+                    try
                     {
+                        await _mailer.SendAsync(new ReminderMailable(item));
                         item.Sent = true;
                     }
+                    catch (Exception e)
+                    {
+                        _logger.LogError(e.Message, e);
+                    }                   
                 }
             }
         }
