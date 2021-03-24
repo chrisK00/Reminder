@@ -8,7 +8,7 @@ namespace Reminder.api.Models
 {
     public class ReminderMailable : Mailable<ReminderMailable>
     {
-        private ReminderModel _reminderModel;
+        private readonly ReminderModel _reminderModel;
         public ReminderMailable(ReminderModel reminderModel)
         {
             _reminderModel = reminderModel;
