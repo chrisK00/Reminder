@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using Coravel;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -9,9 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Reminder.api.Data;
 using Reminder.api.Invocables;
-using Reminder.api.Models;
 using Reminder.api.Repositories;
-using Reminder.api.Services;
 using Serilog;
 
 namespace Reminder.api

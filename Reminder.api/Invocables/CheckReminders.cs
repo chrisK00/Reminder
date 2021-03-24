@@ -1,12 +1,10 @@
-﻿using Coravel.Invocable;
+﻿using System;
+using System.Threading.Tasks;
+using Coravel.Invocable;
 using Coravel.Mailer.Mail.Interfaces;
 using Microsoft.Extensions.Logging;
 using Reminder.api.Models;
 using Reminder.api.Repositories;
-using Reminder.api.Services;
-using System;
-using System.Net.Mail;
-using System.Threading.Tasks;
 
 namespace Reminder.api.Invocables
 {
